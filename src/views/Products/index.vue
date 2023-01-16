@@ -1,7 +1,65 @@
 <script>
-let productModal = null;
-let delProductModal = null;
-export default {}
+import ProductModal from '@/components/ProductModal/index.vue'
+import DelProductModal from '@/components/DelProductModal/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
+
+export default {
+  data() {
+    return {
+      apiUrl: 'https://vue3-course-api.hexschool.io/v2',
+      apiPath: 'ryantsai',
+      products: [],
+      tempProduct: {
+        imagesUrl: [],
+      },
+      pagination: {},
+      isNew: false,
+      delItem: null
+    }
+  },
+  mounted() {
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    axios.defaults.headers.common.Authorization = token;
+    this.checkAdmin();
+  },
+  components: {
+    ProductModal,
+    DelProductModal,
+    Pagination
+  },
+  methods: {
+    checkAdmin() {
+      const url = `${this.apiUrl}/api/user/check`;
+      axios.post(url)
+        .then(() => {
+          this.getData();
+        })
+        .catch((err) => {
+          alert(err.response.data.message)
+          this.$router.push({ name: 'Login' });
+        })
+    },
+    getData() {
+      const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=1`;
+      axios.get(url)
+        .then((response) => {
+          const { products, pagination } = response.data;
+          this.products = products;
+          this.pagination = pagination;
+        }).catch((err) => {
+          alert(err.response.data.message);
+          this.$router.push({ name: 'Login' })
+        })
+    },
+    openModal(modalName, item) {
+      if (modalName === 'delProductModal') {
+        this.delItem = item;
+        const delProductModal = this.$refs.delProduct.delProductModal;
+        delProductModal.show();
+      }
+    }
+  }
+}
 </script>
 
 <template src="./template.html"></template>

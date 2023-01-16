@@ -13,11 +13,10 @@ export default {
       const api = 'https://vue3-course-api.hexschool.io/admin/signin';
       axios.post(api, this.user).then((response) => {
         const { token, expired } = response.data;
-        console.log(response);
         // 寫入 cookie token
         // expires 設置有效時間
         document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
-        router.push({ path: '/products'});
+        this.$router.push({ name: 'Products'});
       }).catch((err) => {
         alert(err.response.data.message);
       });
