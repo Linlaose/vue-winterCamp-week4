@@ -13,8 +13,9 @@ export default {
         imagesUrl: [],
       },
       pagination: {},
-      isNew: false,
-      delItem: null
+      delItem: null,
+      editItem: null,
+      isNew: true
     }
   },
   mounted() {
@@ -27,7 +28,7 @@ export default {
     DelProductModal,
     Pagination
   },
-  methods: {
+  methods: { 
     checkAdmin() {
       const url = `${this.apiUrl}/api/user/check`;
       axios.post(url)
@@ -56,8 +57,23 @@ export default {
         this.delItem = item;
         const delProductModal = this.$refs.delProduct.delProductModal;
         delProductModal.show();
+      } else if (modalName === 'productModal') {
+        if (this.editItem) {
+          this.isNew = true;
+          this.editItem = _.cloneDeep(this.tempProduct);
+        }
+        const productModal = this.$refs.product.productModal;
+        productModal.show();
+      } else if (modalName === 'edit') {
+        if (!item['imagesUrl']) {
+          item['imagesUrl'] = [];
+        }
+        this.isNew = false;
+        this.editItem = _.cloneDeep(item);
+        const productModal = this.$refs.product.productModal;
+        productModal.show();
       }
-    }
+    },
   }
 }
 </script>
