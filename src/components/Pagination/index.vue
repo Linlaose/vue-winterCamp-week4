@@ -1,6 +1,8 @@
 <script>
 export default {
-  
+  props: {
+    pagination: Object
+  },
 }
 </script>
 

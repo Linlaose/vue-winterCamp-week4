@@ -40,8 +40,8 @@ export default {
           this.$router.push({ name: 'Login' });
         })
     },
-    getData() {
-      const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=1`;
+    getData(page = 1) {
+      const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`;
       axios.get(url)
         .then((response) => {
           const { products, pagination } = response.data;
