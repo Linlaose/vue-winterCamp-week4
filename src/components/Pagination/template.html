@@ -14,12 +14,12 @@
       <span class="page-link" v-if="item === pagination.current_page"
         >{{ item }}</span
       >
-      <a
+      <router-link
         class="page-link"
-        href="#"
+        :to="'/products/' + item"
         @click.prevent="$emit('changePage', item)"
         v-else
-        >{{ item }}</a
+        >{{ item }}</router-link
       >
     </li>
     <li class="page-item" :class="{ disabled: !pagination.has_next}">
