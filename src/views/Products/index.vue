@@ -2,6 +2,7 @@
 import ProductModal from '@/components/ProductModal/index.vue'
 import DelProductModal from '@/components/DelProductModal/index.vue'
 import Pagination from '@/components/Pagination/index.vue'
+import { handleError } from 'vue'
 
 export default {
   data() {
@@ -40,7 +41,7 @@ export default {
           this.$router.push({ name: 'Login' });
         })
     },
-    getData(page = 1) {
+    getData(page) {
       const url = `${this.apiUrl}/api/${this.apiPath}/admin/products?page=${page}`;
       axios.get(url)
         .then((response) => {
@@ -74,6 +75,11 @@ export default {
         productModal.show();
       }
     },
+  },
+  watch: {
+    $route(to, from) {
+      this.getData(to.params.id);
+    }
   }
 }
 </script>
